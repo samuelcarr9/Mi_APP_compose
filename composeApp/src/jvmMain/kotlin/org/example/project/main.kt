@@ -180,10 +180,39 @@ fun Ejercicio5() {
 
 
 
+
 @Composable
 fun Ejercicio6() {
     Text("Dibujamos un tablero de 3x3. Cada elemento del tablero es un box y es clickeable. Al hacer clic en cada celda colocamos una marca  '\\u2714' ")
+    val tablero = remember { mutableStateOf(List(3) { List(3) { "" } }) }
+    Column(
+        modifier = Modifier.padding(16.dp),
+        verticalArrangement = Arrangement.spacedBy(8.dp)
+    ) {
+        tablero.value.forEachIndexed { filaIndex, fila ->
+            Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                fila.forEachIndexed { colIndex, celda ->
+                    Box(
+                        modifier = Modifier
+                            .size(50.dp)
+                            .border(1.dp, Color.Black)
+                            .clickable {
+                                if (tablero.value[filaIndex][colIndex].isEmpty()) {
+                                    val newTablero = tablero.value.map { it.toMutableList() }.toMutableList()
+                                    newTablero[filaIndex][colIndex] = "\u2714"
+                                    tablero.value = newTablero.map { it.toList() }
+                                }
+                            },
+                        contentAlignment = Alignment.Center
+                    ) {
+                        Text(tablero.value[filaIndex][colIndex])
+                    }
+                }
+            }
+        }
+    }
 }
+
 
 
 fun main() = application {
